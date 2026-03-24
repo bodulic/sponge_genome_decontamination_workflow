@@ -215,8 +215,8 @@ busco_res[, "species" := sub("_", " ", species, fixed = T)]
 busco_res[, "species" := factor(species, levels = species_fact_levels)]
 busco_res[, "genome_category" := factor(genome_category, levels = c("Original", "Decontaminated"))] 
 
-#Plotting the number of complete BUSCOs in original and decontaminated assemblies (Figure 3f)
-fig_3f <- ggplot(data = busco_res,aes(x = species, y = N_BUSCO, color = genome_category)) +
+#Plotting the number of complete BUSCOs in original and decontaminated assemblies (Figure 3g)
+fig_3g <- ggplot(data = busco_res,aes(x = species, y = N_BUSCO, color = genome_category)) +
  geom_point(position = position_dodge(width = 0), size = 1, shape = 16, alpha = 0.7) +
  theme_minimal() +
  scale_color_manual(values = c("#F06C0BFF", "#4FA3BCFF")) +
@@ -233,4 +233,4 @@ fig_3f <- ggplot(data = busco_res,aes(x = species, y = N_BUSCO, color = genome_c
  theme(axis.text.x = element_text(size = 5.6, angle = 55, hjust = 0.9, face = "italic")) +
  theme(axis.text.y = element_text(size = 4.5)) 
 
-ggsave(fig_3f, file = "fig_3f.svg", height = 2.5, width = 6)
+ggsave(fig_3g, file = "fig_3g.svg", height = 2.5, width = 6)
