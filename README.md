@@ -20,6 +20,8 @@ The following dependencies were used in the pipeline:
 | datasets                         | 18.20.0     |
 | R                                | 4.5.2       |
 | stringr (R)                      | 1.5.1       | 
+| data.table (R)                   | 1.17.8      | 
+| ggplot2 (R)                      | 4.0.2       | 
 | scales  (R)                      | 1.4.0       |
 | Genome decontamination pipeline  | 1.0.0       |
 | BUSCO                            | 6.0.0       |
