@@ -120,7 +120,7 @@ supp_fig1 <- ggplot(data = sequence_length_dt, aes(x = scaff_length, fill = cate
  theme(panel.grid = element_blank()) +
  theme(panel.background = element_rect(fill = NA, color = "grey70"))  +
  scale_x_log10(breaks = 10^c(3, 4, 5, 6, 7, 8), labels = scales::label_log()) +
- xlab("Sequence length") +
+ xlab("Sequence length (bp)") +
  ylab("Relative density") +
  theme(axis.title = element_text(size = 7)) +
  theme(axis.text = element_text(size = 6)) 
