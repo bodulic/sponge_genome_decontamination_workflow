@@ -12,7 +12,7 @@ suppressPackageStartupMessages(library(patchwork))
 #Importing sponge scaffold contamination results from file
 sponge_scaff_res_dt <- fread("scaffold_contamination_info_sponges.tsv")
 sponge_scaff_res_dt[, "species" := sub("_scaffold_contamination_info.tsv", "", filename, fixed = T)]
-sponge_scaff_res_dt[, "species" := sub("_", " ", species, fixed = T)]
+sponge_scaff_res_dt[, "species" := sub("^([A-Za-z])[A-Za-z]*_([A-Za-z]+)$", "\\1. \\2", species)]
 
 #Calculating the proportion of contaminant scaffolds per assembly
 sponge_scaff_contam_N <- sponge_scaff_res_dt[, .("scaff_N" = .N), by = c("contamination", "species")]
@@ -28,20 +28,20 @@ fig_3a <- ggplot(data = sponge_scaff_contam_N, aes(x = species, y = scaff_N, fil
  geom_bar(stat = "identity", position = "fill", width = 0.8, alpha = 0.8) +
  theme_minimal() +
  scale_fill_manual(values = bar_colors, labels = c("Sponge", "Contamination")) +
- theme(legend.position = "right", legend.margin = margin(0, 0, 0, 0)) +
+ theme(legend.position = "top", legend.margin = margin(0, 0, 0, 0)) +
  theme(legend.title = element_blank()) +
- theme(legend.text = element_text(size = 5)) +
+ theme(legend.text = element_text(size = 5.5)) +
  theme(legend.key.size = unit(0.27, 'cm')) +
  theme(panel.grid = element_blank()) +  
  theme(panel.background = element_rect(fill = NA, color = "grey70")) +
  ylab("% scaffolds") +
  scale_y_continuous(breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = c("0", "20", "40", "60", "80", "100")) +
  theme(axis.title.x = element_blank()) +
- theme(axis.title.y = element_text(size = 7.5)) +
- theme(axis.text.x = element_text(size = 5.6, angle = 55, hjust = 0.9, face = "italic")) +
- theme(axis.text.y = element_text(size = 4.5)) 
+ theme(axis.title.y = element_text(size = 6)) +
+ theme(axis.text.x = element_text(size = 5.3, angle = 45, hjust = 0.9, face = "italic")) +
+ theme(axis.text.y = element_text(size = 5.5)) 
 
-ggsave(fig_3a, file = "fig_3a.svg", height = 2.5, width = 6)
+ggsave(fig_3a, file = "Figure_3a.svg", height = 1.7, width = 3.1)
 
 #Calculating the proportion of contaminant genome length per assembly
 sponge_scaff_contam_len <- sponge_scaff_res_dt[, .("scaff_len_sum" = sum(scaffold_len)), by = c("contamination", "species")]
@@ -52,7 +52,7 @@ fig_3b <- ggplot(data = sponge_scaff_contam_len, aes(x = species, y = scaff_len_
  geom_bar(stat = "identity", position = "fill", width = 0.8, alpha = 0.8) +
  theme_minimal() +
  scale_fill_manual(values = bar_colors, labels = c("Sponge", "Contamination")) +
- theme(legend.position = "right", legend.margin = margin(0, 0, 0, 0)) +
+ theme(legend.position = "top", legend.margin = margin(0, 0, 0, 0)) +
  theme(legend.title = element_blank()) +
  theme(legend.text = element_text(size = 5)) +
  theme(legend.key.size = unit(0.27, 'cm')) +
@@ -61,11 +61,11 @@ fig_3b <- ggplot(data = sponge_scaff_contam_len, aes(x = species, y = scaff_len_
  ylab("% scaffold length") +
  scale_y_continuous(breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = c("0", "20", "40", "60", "80", "100")) +
  theme(axis.title.x = element_blank()) +
- theme(axis.title.y = element_text(size = 7.5)) +
- theme(axis.text.x = element_text(size = 5.6, angle = 55, hjust = 0.9, face = "italic")) +
- theme(axis.text.y = element_text(size = 4.5)) 
+ theme(axis.title.y = element_text(size = 6)) +
+ theme(axis.text.x = element_text(size = 5.3, angle = 45, hjust = 0.9, face = "italic")) +
+ theme(axis.text.y = element_text(size = 5.5)) 
 
-ggsave(fig_3b, file = "fig_3b.svg", height = 2.5, width = 6)
+ggsave(fig_3b, file = "Figure_3b.svg", height = 1.7, width = 3.1)
 
 #Analysing contaminant scaffold lengths
 sponge_scaff_res_dt_cont <- sponge_scaff_res_dt[contamination == T]
@@ -84,16 +84,16 @@ fig_3c <- ggplot(data = sponge_scaff_res_dt_cont, aes(x = species, y = scaffold_
  scale_y_continuous(breaks = c(1000, 50000, 100000, 150000, 200000), labels = c(1, 50, 100, 150, 200), limits = c(0, max(sponge_scaff_res_dt_cont[, scaffold_len]))) +
  ylab("Scaffold length (kb)") +
  theme(axis.title.x = element_blank()) +
- theme(axis.title.y = element_text(size = 7.5)) +
- theme(axis.text.x = element_text(size = 5.6, angle = 55, hjust = 0.9, face = "italic")) +
- theme(axis.text.y = element_text(size = 4.5)) 
-  
-ggsave(fig_3c, file = "fig_3c.svg", height = 2.5, width = 5.25)
+ theme(axis.title.y = element_text(size = 6)) +
+ theme(axis.text.x = element_text(size = 5.3, angle = 45, hjust = 0.9, face = "italic")) +
+ theme(axis.text.y = element_text(size = 5.5)) 
+
+ggsave(fig_3c, file = "Figure_3c.svg", height = 1.44, width = 3.1)
 
 #Importing contaminant scaffolds from file
 contam_scaff_taxonomy <- fread("contaminant_scaffolds_taxonomy_sponges.tsv")
 contam_scaff_taxonomy[, "species" := sub("_contaminant_scaffolds_taxonomy.tsv", "", filename, fixed = T)]
-contam_scaff_taxonomy[, "species" := sub("_", " ", species)]
+contam_scaff_taxonomy[, "species" := sub("^([A-Za-z])[A-Za-z]*_([A-Za-z]+)$", "\\1. \\2", species)]
 
 #Assigning higher taxonomic categories to contaminant taxa
 taxa_to_assign_higher_tax <- unique(contam_scaff_taxonomy[is.na(assigned_tax) == F, assigned_tax])
@@ -151,34 +151,34 @@ domain_colors <- list(Domain = domain_colors)
 heatmap_colors <- c("#4FA3BCFF", "#77B7CFFF", "#9EC3A9FF", "#CFCB63FF", "#E3AE12FF", "#F06C0BFF")
 
 #Plotting the proportion of contaminant scaffold phyla across sponge assemblies (Figure 3d)
-pdf(file = "fig3d.pdf", width = 7.1, height = 4)
-pheatmap(contam_scaff_taxonomy_N_mat, cluster_rows = T, cluster_cols = T, color = colorRampPalette(heatmap_colors)(100), border_color = NA, fontsize = 7, fontsize_row = 5.6, fontsize_col = 5.1, angle_col = 45, legend_breaks = c(-4, -3, -2, -1, -0.7), legend_labels = c("0  ","0.1 ", "1  ","10  ", "% scaffolds  "), annotation_col = anno_col, annotation_colors = domain_colors)
+pdf(file = "Figure_3d.pdf", width = 5, height = 4)
+pheatmap(contam_scaff_taxonomy_N_mat, cluster_rows = T, cluster_cols = T, color = colorRampPalette(heatmap_colors)(100), border_color = NA, treeheight_row = 15, treeheight_col = 25, fontsize = 6, fontsize_row = 5.2, fontsize_col = 5.3, angle_col = 90, legend_breaks = c(-4, -3, -2, -1, -0.7), legend_labels = c("0  ","0.1 ", "1  ","10  ", "% scaffolds  "), annotation_col = anno_col, annotation_colors = domain_colors)
 dev.off()
 
 #Plotting Venn diagram of compositional, protein-based, and nucleotide-based scores per assembly (Figure 3e)
 scores_venn <- function(sponge_scaff_res_dt, species) {
  sets <- list(C = sponge_scaff_res_dt[compositional_score == 1, scaffold_name], P = sponge_scaff_res_dt[prot_taxonomy_score == 1, scaffold_name], N  = sponge_scaff_res_dt[nucl_taxonomy_score == 1, scaffold_name])
 
- ggVennDiagram(sets,label = "count", label_alpha = 0, set_size = 1.9, label_size = 2.2, edge_size = 0.2) +
+ ggVennDiagram(sets,label = "count", label_alpha = 0, set_size = 2.1, label_size = 2, edge_size = 0.2) +
   theme_void() +
   scale_fill_gradient(low = "#F7FBFF", high = "#4FA3BCFF") +
   theme(legend.position = "none") +
-  theme(plot.margin = margin(2, 2, 2, 2)) +
+  theme(plot.margin = margin(1, 1, 1, 1)) +
   labs(title = species) +
-  theme(plot.title = element_text(hjust = 0.5, face = "italic", size = 5.2)) 
+  theme(plot.title = element_text(hjust = 0.5, face = "italic", size = 5.5)) 
 }
 
 venn_list <- lapply(species_fact_levels, function(sp) {
  sponge_scaff_res_dt_species <- sponge_scaff_res_dt[species == sp] 
  scores_venn(sponge_scaff_res_dt_species, sp)})
 
-fig_3e <- wrap_plots(plotlist = venn_list, nrow = 5) 
-ggsave(fig_3e, file = "fig_3e.svg", height = 5.5, width = 7.9)
+fig_3e <- wrap_plots(plotlist = venn_list, nrow = 6) 
+ggsave(fig_3e, file = "Figure_3e.svg", height = 5, width = 4.75)
 
 #Importing UMAP projection coordinates of k-mer-based PCs from file
 umap_res_dt <- fread("mc_umap_dt_sponges.tsv")
 umap_res_dt[, "species" := sub("_mc_umap_dt.tsv", "", filename, fixed = T)]
-umap_res_dt[, "species" := sub("_", " ", species, fixed = T)]
+umap_res_dt[, "species" := sub("^([A-Za-z])[A-Za-z]*_([A-Za-z]+)$", "\\1. \\2", species)]
 umap_res_dt <- merge(umap_res_dt, sponge_scaff_res_dt[, .(scaffold_name, species, prot_taxonomy_score, nucl_taxonomy_score)], by = c("scaffold_name", "species"))
 umap_res_dt[, "prot_nucl_tax_score" := paste(prot_taxonomy_score, nucl_taxonomy_score)]
 umap_res_dt[, "species" := factor(species, levels = species_fact_levels)]
@@ -190,16 +190,18 @@ fig_3f <-  ggplot(data = umap_res_dt, aes(UMAP1, UMAP2, color = prot_nucl_tax_sc
  scale_color_manual(values = wes_palette("Darjeeling1", 5, type = "discrete")[c(5, 2, 3, 4)], name = "Taxonomy scores", labels = c("None", expression(italic("P")), expression(italic("N")), expression(italic("P") ~ "+" ~ italic("N")))) +
  theme(legend.position = "bottom", legend.margin = margin(0, 0, 0, 0), legend.box.spacing = unit(0.05, "cm")) +      
  theme(legend.title = element_text(size = 5.2)) +
- theme(legend.text = element_text(size = 4.2)) +
+ theme(legend.text = element_text(size = 5.2)) +
  guides(color = guide_legend(override.aes = list(size = 1, alpha = 1))) +
- facet_wrap(. ~ species, scales = "free") +
- theme(strip.text = element_text(size = 5, face = "italic")) +
+ facet_wrap(. ~ species, scales = "free", nrow = 6) +
+ theme(strip.text = element_text(size = 5.1, face = "italic")) +
  theme(panel.grid = element_blank())  +
  theme(panel.background = element_rect(fill = NA, color = "grey70")) +
- theme(axis.title = element_text(size = 6)) +
- theme(axis.text = element_text(size = 4.3))
+ scale_x_continuous(breaks = function(x) pretty(x, n = 3)) +
+ scale_y_continuous(breaks = function(x) pretty(x, n = 3)) +
+ theme(axis.title = element_text(size = 5)) +
+ theme(axis.text = element_text(size = 5)) 
 
-ggsave(fig_3f, file = "fig_3f.svg", height = 5.3, width = 6.1)
+ggsave(fig_3f, file = "Figure_3f.svg", height = 5, width = 4.2)
 
 #Importing BUSCO results from file
 orig_genome_busco_res <- fread("busco_original_genome_complete_merged.tsv")
@@ -211,12 +213,12 @@ decom_genome_busco_res[, "category" := "Decontaminated"]
 busco_res <- rbindlist(list(orig_genome_busco_res, decom_genome_busco_res))
 setnames(busco_res, c("N_BUSCO", "species", "genome_category"))
 busco_res[, "species" := sub("^(([^_]*_){1}[^_]*)_.*$", "\\1", species)]
-busco_res[, "species" := sub("_", " ", species, fixed = T)]
+busco_res[, "species" := sub("^([A-Za-z])[A-Za-z]*_([A-Za-z]+)$", "\\1. \\2", species)]
 busco_res[, "species" := factor(species, levels = species_fact_levels)]
 busco_res[, "genome_category" := factor(genome_category, levels = c("Original", "Decontaminated"))] 
 
 #Plotting the number of complete BUSCOs in original and decontaminated assemblies (Figure 3g)
-fig_3g <- ggplot(data = busco_res,aes(x = species, y = N_BUSCO, color = genome_category)) +
+supp_fig2 <- ggplot(data = busco_res,aes(x = species, y = N_BUSCO, color = genome_category)) +
  geom_point(position = position_dodge(width = 0), size = 1, shape = 16, alpha = 0.7) +
  theme_minimal() +
  scale_color_manual(values = c("#F06C0BFF", "#4FA3BCFF")) +
@@ -233,4 +235,4 @@ fig_3g <- ggplot(data = busco_res,aes(x = species, y = N_BUSCO, color = genome_c
  theme(axis.text.x = element_text(size = 5.6, angle = 55, hjust = 0.9, face = "italic")) +
  theme(axis.text.y = element_text(size = 4.5)) 
 
-ggsave(fig_3g, file = "fig_3g.svg", height = 2.5, width = 6)
+ggsave(supp_fig2, file = "Supplementary_figure2.tiff", height = 2, width = 5, dpi = 600, bg = "white")

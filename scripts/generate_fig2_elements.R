@@ -41,8 +41,8 @@ fig_2a <- ggplot(data = perf_metrics, aes(x = predictor, y = value, fill = metri
  scale_fill_manual(values = wes_palette("Darjeeling1", 5, type = "discrete")[c(1, 3, 5)], labels = c("Accuracy", "Precision", "Recall")) +
  theme(legend.position = "bottom", legend.margin = margin(0, 0, 0, 0)) +
  theme(legend.title = element_blank()) +
- theme(legend.text = element_text(size = 5))  +
- theme(legend.key.size = unit(0.27, 'cm')) +
+ theme(legend.text = element_text(size = 6.5))  +
+ theme(legend.key.size = unit(0.28, 'cm')) +
  theme(panel.grid = element_blank()) +  
  theme(panel.background = element_rect(fill = NA, color = "grey70")) +
  xlab("Score") +
@@ -52,7 +52,7 @@ fig_2a <- ggplot(data = perf_metrics, aes(x = predictor, y = value, fill = metri
  theme(axis.text.x = element_text(size = 6, face = "italic")) +
  theme(axis.text.y = element_text(size = 6)) 
 
-ggsave(fig_2a, file = "fig_2a.svg", height = 1.8, width = 3.5)
+ggsave(fig_2a, file = "Figure_2a.svg", height = 1.55, width = 2.9)
 
 #Preparing for intersection analysis
 validation_dataset_decon_results[contamination_truth == 0 & contamination == 0, "class_result" := "TN"]
@@ -64,8 +64,8 @@ upset_dt <- validation_dataset_decon_results[, .("C" = compositional_score == 1,
 upset_dt[, "Classification" := factor(Classification, levels = c("TN", "TP", "FN", "FP"))]
 
 #Plotting UpSet plot of scoring component results (Figure 2b)
-fig_1b <- upset(upset_dt, intersect = c("C", "P", "N"), set_sizes = F, height_ratio = 0.4, stripes = 'white', 
- themes = upset_modify_themes(list("intersections_matrix" = theme(axis.text.y = element_text(size = 6.5, face = "italic"), axis.title.x = element_blank()))), 
+fig_2b <- upset(upset_dt, intersect = c("C", "P", "N"), set_sizes = F, height_ratio = 0.4, stripes = 'white', 
+ themes = upset_modify_themes(list("intersections_matrix" = theme(axis.text.y = element_text(size = 6.5), axis.title.x = element_blank()))), 
  base_annotations = list("Intersection size" = intersection_size(mapping = aes(fill = Classification), text = list(size = 0), alpha = 0.7) +
   scale_fill_manual(values = wes_palette("Darjeeling1", 5, type = "discrete")[c(5, 4, 2, 1)]) +
   theme(legend.position = "top", legend.direction = "horizontal", legend.margin = margin(0, 0, 0, 0)) +
@@ -79,13 +79,13 @@ fig_1b <- upset(upset_dt, intersect = c("C", "P", "N"), set_sizes = F, height_ra
  annotations = list("Scaffold length" = (
   ggplot(mapping = aes(y = log10(scaffold_length))) + 
    geom_boxplot(width = 0.8, size = 0.2, outlier.shape = NA, color = "gray40", fill = "#5BBCD6", alpha = 0.7) +
-   ylab("log(sequence length)") +
-   theme(panel.grid = element_blank() +
-   theme(panel.background = element_rect(fill = NA, color = "grey70") +
-   theme(axis.title.y = element_text(size = 6)) +
-   theme(axis.text.y = element_text(size = 5.5)))))))
+    ylab("log(sequence length)") +
+    theme(panel.grid = element_blank()) +
+    theme(panel.background = element_rect(fill = NA, color = "grey70")) +
+    theme(axis.title.y = element_text(size = 6)) +
+    theme(axis.text.y = element_text(size = 5.75)))))
 
-ggsave(fig_1b, file = "fig_1b.svg", height = 3.2, width = 3.5)
+ggsave(fig_2b, file = "Figure_2b.svg", height = 3.1, width = 2.9)
 
 #Analysing recall per phylum
 external_contaminant_taxonomy_dt <- fread("taxonomy_info_validation.csv")
@@ -114,8 +114,8 @@ domain_colors <- list(Domain = domain_colors)
 heatmap_colors <- c("#4FA3BCFF", "#77B7CFFF", "#9EC3A9FF", "#CFCB63FF", "#E3AE12FF", "#F06C0BFF")
 
 #Plotting recall for each individual scoring component and for the integrated contamination score per phylum (Figure 2c)
-pdf(file = "fig_2c.pdf", width = 5.5, height = 4)
-pheatmap(validation_dataset_decon_results_cont, cluster_rows = T, cluster_cols = T, color = heatmap_colors, border_color = "gray20", cellheight = 12, treeheight_row = 20, treeheight_col = 25, fontsize = 5.5, legend_breaks = c(0, 0.2, 0.4, 0.6, 0.8, 0.95, 1), legend_labels = c("0  ", "0.2  ", "0.4  ", "0.6  ", "0.8  ", "1  ", "Recall  "), annotation_col = ann_col, annotation_colors = domain_colors)
+pdf(file = "Figure_2c.pdf", width = 5, height = 4)
+pheatmap(validation_dataset_decon_results_cont, cluster_rows = T, cluster_cols = T, color = heatmap_colors, border_color = "gray20", cellheight = 12, treeheight_row = 20, treeheight_col = 25, fontsize = 5.5, fontsize_row  = 6.5, fontsize_col  = 5.5, legend_breaks = c(0, 0.2, 0.4, 0.6, 0.8, 0.95, 1), legend_labels = c("0  ", "0.2  ", "0.4  ", "0.6  ", "0.8  ", "1  ", "Recall  "), annotation_col = ann_col, annotation_colors = domain_colors)
 dev.off()
 
 #Importing contaminant scaffold taxonomy from file
@@ -162,8 +162,8 @@ fig_2d <- ggplot(data = contam_scaff_taxonomy_N, aes(x = phylum_true, y = assign
  theme_minimal() +
  scale_fill_manual(values = bar_colors, name = "Assigned taxon level") +
  theme(legend.position = "right", legend.margin = margin(0, 0, 0, 0)) +
- theme(legend.title = element_text(size = 5.5))  +
- theme(legend.text = element_text(size = 5.2))  +
+ theme(legend.title = element_text(size = 5.75))  +
+ theme(legend.text = element_text(size = 5.75))  +
  theme(legend.key.size = unit(0.28, 'cm')) +
  theme(panel.grid = element_blank()) +  
  theme(panel.background = element_rect(fill = NA, color = "grey70")) +
@@ -171,7 +171,7 @@ fig_2d <- ggplot(data = contam_scaff_taxonomy_N, aes(x = phylum_true, y = assign
  ylab("% of sequences") +
  scale_y_continuous(breaks=c(0, 0.2, 0.4, 0.6, 0.8, 1), labels = c(0, 20, 40, 60, 80, 100)) +
  theme(axis.title = element_text(size = 6.5)) +
- theme(axis.text.x = element_text(size = 5.2, angle = 40, hjust = 0.9, color = x_axis_colors)) +
+ theme(axis.text.x = element_text(size = 5.25, angle = 45, hjust = 0.9, color = x_axis_colors)) +
  theme(axis.text.y = element_text(size = 6)) 
 
-ggsave(fig_2d, file = "fig_2d.svg", height = 1.8, width = 4.53)
+ggsave(fig_2d, file = "Figure_2d.svg", height = 1.8, width = 4.4)
